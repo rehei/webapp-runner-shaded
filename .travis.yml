@@ -1,0 +1,27 @@
+language: scala
+env:
+  global:
+  - SCALA_PRIMARY_VERSION=2.11
+  - SCALA_SECONDARY_VERSION=6
+  - SCALA_VERSION=${SCALA_PRIMARY_VERSION}.${SCALA_SECONDARY_VERSION}
+  - BINTRAY_REALM=Bintray API Realm
+  - BINTRAY_HOST=api.bintray.com
+  - BINTRAY_USER=rehei
+  - secure: GDy3B8p3uqzc+zH3r4EcAcEgY7A6+QD/n4e8Ks7y4uWa4sUVG5p5QS00KIefnJgM1mCCZ4R5YztvOHlxdGx18C9/1k+yTS38zI0VD10AcyDCXqAHmQAncA0/El4petF9cYptS7WLxXcVnqXDKOKKnPqJZR7cUVKEvO8HMX+0G6OKGa9SMFSM9LZByB8oJ/CwkSGuijRPLdbeiGJdRgF7NxIALjQ4VPsvLjACrNRQixX7g0/RoLJqHbgNbpw/V4d8aN+2DGd6MguO/9o0xqb1J09I6Aiw8eKXrmSnkZGBw+DG47NlHtXO4VhtYe4ScjUufYwTZIErxtf9JuTcu92hijJIw1MA2t34N6OP/M1A0bcGBAYAAn/cEJOOVwc0OirmEllw132pVTAT4iApiE1jJWwwtzukVW+zpLCqIsVJeHpmdSUPetDXv08XUuEf3iSFuJFWFRtqnaBW0WGXX+ruPl0vyMe3izBOo55WM6eVv7YQGYNPkj0DLT8e2J487pa7oR+/Z0WjaIEqDH4YGNubfNEeV/xO9yWhSjGktM0Tk5eMhF+HdaKrv7xuEmxBlc+oKe2IuG6Q8zUcbEHQ9mIn7/YnOsEujQUAQji2CGcwWGLobIaZcBDoF2vVKJAoSEctka5D2ybUoZvLbNj/Sb634rctE+64m9sQqWc8l1d3A1I=
+script:
+- ./sbt -Dtag=${TRAVIS_TAG} ++$TRAVIS_SCALA_VERSION assembly
+scala:
+- $SCALA_VERSION
+deploy:
+- provider: releases
+  api_key:
+    secure: XHkItcZUjIDemiX6UPIIg7aYhBxRzz2xGCnYQg+rs0EVjD69aiWwnqYqlTXsJZhLrnGEqyxQy4lfec3cqwqQh1lV3mgkogMjb/CygversgwZor0ulFe41SNNHC6Km8ylKHi9/HDEak/u9MaZT9TnDZpYdvygiU34BKjQlxU8aajfamnT6r/rAERf7G0B4seXB7QyUJcDi99y1Fmq3Pn61yqd36FmjGgB2WQCse1VfuGIxZ9cZ7mz1hT+EDpnLPF6FuzvT5qKCCS1MQjnIZukkqf0bC8ZhG3yXwZLdXWUu3x4UXz/9NkO5VnJgYZUkReclSN1Mhwm1KYUsIhXobbRhNu+apFNxpPr+kCsMt0E6CrfywZxU1oO/f3SqhEGdI8dgFe4Tug9j+Fh1Sbgp307LXHVRZghQJXn2wVOeS+vJnfoWmqUnwVpDCPArvsDedbeuV2jfFRXUj3Ptwi2DFLL5bDgN+F6nyOBlBuuv3KkPwyKKfAJttjmgzucIN0U/bCitD9br19XMWyq9FJs8hQ5iw2TMpSjBVTZ99cV8HE86sKdTrmhExrz6yW8jBYTEEMypPrKkcZzpIJSnsyfyKu1jO7ZxNg8TAUmqRta78ariwJH6/dnMRnmX5c1Sb7hDzpzxlRnHgvXu5nYbPI3iLp1oJhlaDGTINnIYJpKw+Z359c=
+  file: target/webapp-runner-shaded-${TRAVIS_TAG}.jar
+  on:
+    tags: true
+    repo: rehei/webapp-runner-shaded
+- provider: script
+  script: ./bintray.sh
+  on:
+    tags: true
+    repo: rehei/webapp-runner-shaded
